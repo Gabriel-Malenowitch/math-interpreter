@@ -1,23 +1,34 @@
-const express = require('express')
+/* eslint-disable linebreak-style */
+const express = require('express');
+const Calc = require('./src/Objects/Calc.js');
 
-const Calc = require("./src/Objects/Calc.js")
+const app = express();
 
-const app = express()
 
-let text = ''
+// Ao chegar qualquer URL =>
+app.get('*', (req, res)=>{
+  const regExRemoveFirst = /.(.*)/;
+  const expression = req.url.replace(regExRemoveFirst, '$1');
 
-app.use((req, res, next)=>{
-    const regExRemoveFirst = /.(.*)/
-    text = req.url.replace(regExRemoveFirst,"$1")
+  // Inicialização de um novo cálculo
+  const calc = new Calc();
 
-    console.log(text)
-    
+  // Setando expressão
+  calc.set(expression);
 
-    next()
-})
+  // Resolvendo o exercício
+  calc.solve();
 
-const PORT = process.env.PORT || 5000
+  // Pegando a expressão resolvida
+  const solved = calc.getSolved();
 
-app.listen(PORT,()=>{
-    console.log(`Servidor rodando na porta ${PORT}`)
-})
+  // Retornando a resposta
+  res.type('txt').send(solved);
+});
+
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, ()=>{
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
