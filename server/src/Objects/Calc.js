@@ -6,7 +6,7 @@ class Calc {
   expression;
 
   regExDissolveIitens = /\(([0-9]|(\-|\+|\\|\*))*\)/g;
-  regExSortItens = //
+  regExFindItensToSort = /((\-|\+)?[0-9]+((\*|\/)-?[0-9]+)+)|(\+?[0-9]+)/g;
 
   get() {
     return this.expression;
@@ -25,7 +25,31 @@ class Calc {
   }
 
   sortItens() {
-    
+    // Declaração de variáveis
+    const before = []; const after = [];
+    const newExpression = '+'+this.expression;
+
+    // Expressão regular que transforma uma string sem
+    // parenteses em uma lista de itens separados pelos
+    // operadores que devem ir primeiro
+    const separatedItens = newExpression.match(this.regExFindItensToSort);
+
+    // Adição dos itens com o operador "*" ou "/" na
+    // lista before, e os outros na after
+    separatedItens.forEach((e)=>{
+      const regExThereAreOperators = /.*(\*|\/)/;
+      const thereAreOperators = regExThereAreOperators.test(e);
+
+      if (thereAreOperators) {
+        before.push(e);
+      } else {
+        after.push(e);
+      }
+    });
+
+    const finalOrdenedList = [...before, ...after];
+
+    return finalOrdenedList;
   }
 }
 

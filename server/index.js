@@ -1,6 +1,6 @@
 /* eslint-disable linebreak-style */
 const express = require('express');
-const Calc = require('./src/Objects/Calc.js');
+// const Calc = require('./src/Objects/Calc.js');
 
 const app = express();
 
@@ -22,7 +22,7 @@ app.get('*', (req, res)=>{
   // Pegando a expressão resolvida
   const solved = calc.getSolved();
 
-  // Retornando a resposta
+  //   Retornando a resposta
   res.type('txt').send(solved);
 });
 
