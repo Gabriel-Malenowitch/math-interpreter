@@ -23,9 +23,9 @@ expressions.forEach((item, key)=>{
 
 
     const answers = [
-      '-423/13+1234',
-      '5432*123-12',
-      '9*123-123',
+      ['-423/13', '+1234'],
+      ['+5432*123', '-12'],
+      ['+9*123', '-123'],
       '321-(123/345+4324)+4312',
       '321-(123/345+4324)+(43/12)',
       '321-((123/9*99)-(2/3)45+4324)+4312',
@@ -34,10 +34,9 @@ expressions.forEach((item, key)=>{
 
     const calc = new Calc();
 
-
     calc.set(item);
     const result = calc.sortItens();
-    expect(result).toBe(answers[key]);
+    expect(result).toEqual(answers[key]);
   });
 });
 

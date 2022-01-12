@@ -6,7 +6,7 @@ class Calc {
   expression;
 
   regExDissolveIitens = /\(([0-9]|(\-|\+|\\|\*))*\)/g;
-  regExFindItensToSort = /((\-|\+)?[0-9]+((\*|\/)-?[0-9]+)+)|(\+?[0-9]+)/g;
+  regExFindItensToSort = /((\-|\+)?[0-9]+((\*|\/)-?[0-9]+)+)|((\+|\-)?[0-9]+)/g;
 
   get() {
     return this.expression;
@@ -25,31 +25,32 @@ class Calc {
   }
 
   sortItens() {
+    if (!this.expression.includes('(')) {
     // Declaração de variáveis
-    const before = []; const after = [];
-    const newExpression = '+'+this.expression;
+      const before = []; const after = [];
+      const newExpression = '+'+this.expression;
 
-    // Expressão regular que transforma uma string sem
-    // parenteses em uma lista de itens separados pelos
-    // operadores que devem ir primeiro
-    const separatedItens = newExpression.match(this.regExFindItensToSort);
+      // Expressão regular que transforma uma string sem
+      // parenteses em uma lista de itens separados pelos
+      // operadores que devem ir primeiro
+      const separatedItens = newExpression.match(this.regExFindItensToSort);
 
-    // Adição dos itens com o operador "*" ou "/" na
-    // lista before, e os outros na after
-    separatedItens.forEach((e)=>{
-      const regExThereAreOperators = /.*(\*|\/)/;
-      const thereAreOperators = regExThereAreOperators.test(e);
+      // Adição dos itens com o operador "*" ou "/" na
+      // lista before, e os outros na after
+      separatedItens.forEach((e)=>{
+        if (e.includes('*') || e.includes('/')) {
+          before.push(e);
+        } else {
+          after.push(e);
+        }
+      });
 
-      if (thereAreOperators) {
-        before.push(e);
-      } else {
-        after.push(e);
-      }
-    });
+      const finalOrdenedList = [...before, ...after];
 
-    const finalOrdenedList = [...before, ...after];
-
-    return finalOrdenedList;
+      return finalOrdenedList;
+    } else {
+      return this.expression;
+    }
   }
 }
 
