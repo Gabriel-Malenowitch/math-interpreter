@@ -81,6 +81,7 @@ class Calc {
     if (!this.expression.includes('(')) {
       const results = [];
       let result = 0;
+      let finalResult = 0;
       const separatedItem = this.separateItem();
 
       // Passando por cada item da lista de itens separados
@@ -144,7 +145,11 @@ class Calc {
         }
       });
 
-      return results;
+      results.forEach((n)=>{
+        finalResult+=Number(n);
+      });
+
+      return finalResult;
     } else {
       return this.expression;
     }
