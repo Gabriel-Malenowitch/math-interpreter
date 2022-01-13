@@ -56,16 +56,21 @@ class Calc {
   }
 
   // Dissolve mais ainda os itens em um novo array
-  separateItem(finalOrdenedList) {
-    const separatedItem = [];
+  separateItem() {
+    if (!this.expression.includes('(')) {
+      const finalOrdenedList = this.sortItens(this.expression);
+      const separatedItem = [];
 
-    finalOrdenedList.forEach((item)=>{
-      item.match(regExSeparateItem).forEach((e)=>{
-        separatedItem.push(e);
+      finalOrdenedList.forEach((item)=>{
+        item.match(this.regExSeparateItem).forEach((e)=>{
+          separatedItem.push(e);
+        });
       });
-    });
 
-    return separatedItem;
+      return separatedItem;
+    } else {
+      return this.expression;
+    }
   }
 }
 
