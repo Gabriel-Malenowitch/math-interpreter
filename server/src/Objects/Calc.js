@@ -13,25 +13,41 @@ class Calc {
   regExIsANumber = /(\-|\+)?[0-9]+/;
   regExIncludeOperators = /(\/|\*)/;
 
-  get() {
+  getResult() {
     return this.expression;
   }
   set(newExpression) {
     this.expression = newExpression;
   }
-  getSolved() {
-    return this.solvedExpression;
-  }
 
   solve() {
-    this.solvedExpression = solveLittleItens(); // OrganizeItens implicito
-    // this.solvedExpression = dissolveItens(); // OrganizeItens implicito
-    // this.solvedExpression = solveAllItens(); // OrganizeItens implicito
+    let ended = false;
+    let cont = 0;
+    do {
+      if (String(this.expression).includes('(')) {
+        this.expression = this.solveInside(this.expression);
+      } else {
+        this.expression = this.solveItens(this.expression);
+        ended = true;
+      }
+      console.log(this.expression);
+
+      if (cont >= 15) {
+        ended = true;
+        console.log(`
+        =================
+        =================
+        =================
+        `);
+      }
+
+      cont++;
+    } while (!ended);
   }
 
   // Ordena os itens em um novo array
   sortItens(expression) {
-    if (!expression.includes('(')) {
+    if (!String(expression).includes('(')) {
     // Declaração de variáveis
       const before = []; const after = [];
       const newExpression = '+'+expression;
@@ -61,7 +77,7 @@ class Calc {
 
   // Dissolve mais ainda os itens em um novo array
   separateItem(expression) {
-    if (!expression.includes('(')) {
+    if (!String(expression).includes('(')) {
       const finalOrdenedList = this.sortItens(expression);
       const separatedItem = [];
 
@@ -79,7 +95,7 @@ class Calc {
 
   // Resolve os itens através de um laço
   solveItens(expression) {
-    if (!expression.includes('(')) {
+    if (!String(expression).includes('(')) {
       const results = [];
       let result = 0;
       let finalResult = 0;
@@ -168,7 +184,7 @@ class Calc {
 
   // Resolve os itens dentro dos parenteses e recoloca eles na string
   solveInside(expression) {
-    if (expression.includes('(')) {
+    if (String(expression).includes('(')) {
     // Pegando os itens centrais (Os que ficam no
     // núcleo da expressão)
       let oldResults = expression.match(this.regExDissolveIitens);
@@ -183,12 +199,13 @@ class Calc {
 
       oldResults.forEach((item, key)=>{
         const result = newResults[key];
+        console.log(expression, item, result);
         expression = expression.replace(`(${item})`, result);
       });
 
       return expression;
     } else {
-      return this.expression;
+      return this.solveItens(this.expression);
     }
   }
 }

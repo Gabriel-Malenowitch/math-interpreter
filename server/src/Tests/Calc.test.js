@@ -112,10 +112,10 @@ expressions.forEach((item, key)=>{
 
 
     const answers = [
-      '2+2-3',
-      '1234-423/13',
-      '5432*123-12',
-      '-123+9*123',
+      1,
+      1201.462,
+      668124,
+      984,
       '321-4324.357+4312',
       '321-4324.357+3.583',
       '321-(1353-0.667+45+4324)+4312',
@@ -126,6 +126,37 @@ expressions.forEach((item, key)=>{
 
     calc.set(item);
     const result = calc.solveInside(item);
+    expect(result).toEqual(answers[key]);
+  });
+});
+
+
+expressions.forEach((item, key)=>{
+  it(`Resolução final dos exercícios ${key}`, ()=>{
+    /*
+      Resolução final dos exercícios
+    */
+
+
+    const answers = [
+      1,
+      1201.462,
+      668124,
+      984,
+      308.64,
+      -3999.774,
+      -1088.332,
+      14357027,
+    ];
+
+    const calc = new Calc();
+
+    calc.set(item);
+
+    calc.solve();
+
+    const result = calc.getResult();
+
     expect(result).toEqual(answers[key]);
   });
 });
