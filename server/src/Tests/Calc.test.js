@@ -69,6 +69,32 @@ expressions.forEach((item, key)=>{
   });
 });
 
+expressions.forEach((item, key)=>{
+  it(`Resolvendo itens separados e alinhados ${key}`, ()=>{
+    /*
+      Aqui o objetivo é dissolver mais ainda os itens, para que seja possível
+      passar um foreach neles e resolver um por um
+    */
+
+    const answers = [
+      ['+2', '+2', '-3'],
+      ['-32.538', '+1234'],
+      ['668136', '-12'],
+      ['1107', '-123'],
+      '321-(123/345+4324)+4312',
+      '321-(123/345+4324)+(43/12)',
+      '321-((123/9*99)-(2/3)45+4324)+4312',
+      '123+1321*(32+12-(34*3+21)+89*123)+(321-45)',
+    ];
+
+    const calc = new Calc();
+
+    calc.set(item);
+    const result = calc.solveItens();
+    expect(result).toEqual(answers[key]);
+  });
+});
+
 // expressions.forEach((item, key)=>{
 //   it(`Resolvendo os itens iniciais ${key}`, ()=>{
 //     /*
