@@ -7,6 +7,7 @@ class Calc {
 
   regExDissolveIitens = /\(([0-9]|(\-|\+|\\|\*))*\)/g;
   regExFindItensToSort = /((\-|\+)?[0-9]+((\*|\/)-?[0-9]+)+)|((\+|\-)?[0-9]+)/g;
+  regExSeparateItem = /(\/|\*)|((\-|\+)?[0-9]+)/g;
 
   get() {
     return this.expression;
@@ -24,6 +25,7 @@ class Calc {
     // this.solvedExpression = solveAllItens(); // OrganizeItens implicito
   }
 
+  // Ordena os itens em um novo array
   sortItens() {
     if (!this.expression.includes('(')) {
     // Declaração de variáveis
@@ -51,6 +53,19 @@ class Calc {
     } else {
       return this.expression;
     }
+  }
+
+  // Dissolve mais ainda os itens em um novo array
+  separateItem(finalOrdenedList) {
+    const separatedItem = [];
+
+    finalOrdenedList.forEach((item)=>{
+      item.match(regExSeparateItem).forEach((e)=>{
+        separatedItem.push(e);
+      });
+    });
+
+    return separatedItem;
   }
 }
 
