@@ -5,7 +5,8 @@ class Calc {
   solvedExpression = NaN;
   expression;
 
-  regExDissolveIitens = /\(([0-9]|(\-|\+|\\|\*))*\)/g;
+  // regExDissolveIitens = /\(([0-9]|(\-|\+|\\|\*))*\)/g;
+  regExDissolveIitens = /\([^\)\(]+\)/g;
   regExFindItensToSort = /((\-|\+)?[0-9]+((\*|\/)-?[0-9]+)+)|((\+|\-)?[0-9]+)/g;
   regExSeparateItem = /(\/|\*)|((\-|\+)?[0-9]+)/g;
 
@@ -29,11 +30,11 @@ class Calc {
   }
 
   // Ordena os itens em um novo array
-  sortItens() {
-    if (!this.expression.includes('(')) {
+  sortItens(expression) {
+    if (!expression.includes('(')) {
     // Declaração de variáveis
       const before = []; const after = [];
-      const newExpression = '+'+this.expression;
+      const newExpression = '+'+expression;
 
       // Expressão regular que transforma uma string sem
       // parenteses em uma lista de itens separados pelos
@@ -59,9 +60,9 @@ class Calc {
   }
 
   // Dissolve mais ainda os itens em um novo array
-  separateItem() {
-    if (!this.expression.includes('(')) {
-      const finalOrdenedList = this.sortItens(this.expression);
+  separateItem(expression) {
+    if (!expression.includes('(')) {
+      const finalOrdenedList = this.sortItens(expression);
       const separatedItem = [];
 
       finalOrdenedList.forEach((item)=>{
@@ -77,21 +78,22 @@ class Calc {
   }
 
   // Resolve os itens através de um laço
-  solveItens() {
-    if (!this.expression.includes('(')) {
+  solveItens(expression) {
+    if (!expression.includes('(')) {
       const results = [];
       let result = 0;
       let finalResult = 0;
-      const separatedItem = this.separateItem();
+      const separatedItem = this.separateItem(expression);
 
       // Passando por cada item da lista de itens separados
       separatedItem.forEach((item, key)=>{
         const lastItem = separatedItem[key-1];
         const nextItem = separatedItem[key+1];
+        const nextNextItem = separatedItem[key+2];
 
         // Aqui é testado se o item atual é diferente de "*" ou "/"
         if (this.regExIncludeOperators.test(item)) {
-        // Aqui multiplicamos ou dividimos conforme o result anterior
+          // Aqui multiplicamos ou dividimos conforme o result anterior
           switch (item) {
             case '*':
               if (result!=0) {
@@ -114,8 +116,8 @@ class Calc {
         // Aqui também é testado se o item anterior é um número
         // eslint-disable-next-line max-len
         if (this.regExIsANumber.test(lastItem) && !this.regExIncludeOperators.test(item)) {
-        // Como a operação complicada acabou, adicionamos o result
-        // na lista de resultados
+          // Como a operação complicada acabou, adicionamos o result
+          // na lista de resultados
           if (result != 0) {
             if (Number.isInteger(result)) {
               results.push(String(result));
@@ -131,6 +133,15 @@ class Calc {
         // Ou seja, caso não esteja em uma operação incluindo "*" ou "/"
         if (lastItem == undefined && this.regExIsANumber.test(nextItem)) {
           results.push(separatedItem[0]);
+        }
+
+        // eslint-disable-next-line max-len
+        if (nextNextItem == undefined && this.regExIncludeOperators.test(item)) {
+          if (Number.isInteger(result)) {
+            results.push(String(result));
+          } else {
+            results.push(String(result.toFixed(3)));
+          }
         }
 
         // eslint-disable-next-line max-len
@@ -150,6 +161,32 @@ class Calc {
       });
 
       return finalResult;
+    } else {
+      return this.expression;
+    }
+  }
+
+  // Resolve os itens dentro dos parenteses e recoloca eles na string
+  solveInside(expression) {
+    if (expression.includes('(')) {
+    // Pegando os itens centrais (Os que ficam no
+    // núcleo da expressão)
+      let oldResults = expression.match(this.regExDissolveIitens);
+
+      oldResults = oldResults.map((result)=>result.replace(/\((.+)\)/, '$1'));
+
+      // Retorna os itens resolvidos
+      const newResults = oldResults.map((item)=>this.solveItens(item));
+
+      // results.forEach(e=>console.log(e))
+      // newResults.forEach(e=>console.log(e))
+
+      oldResults.forEach((item, key)=>{
+        const result = newResults[key];
+        expression = expression.replace(`(${item})`, result);
+      });
+
+      return expression;
     } else {
       return this.expression;
     }
