@@ -2,7 +2,10 @@
 
 ## Manual para a aplicação:
 - Não utilize uma sintaxe inválida, o cálculo pode dar errado, ou o programa pode dar erro!
-- A operação deve ter a seguinte sintaxe no local host: http://localhost:5000/expressão
+- A operação deve ter a seguinte sintaxe: 
+http://localhost:5000/expressão
+ou 
+https://calculadora-in-backend-gabriel.herokuapp.com/expressão
 
 ### Como utilizar:
 ```
