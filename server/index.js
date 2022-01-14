@@ -38,7 +38,7 @@ app.get('*', (req, res)=>{
   } else {
     res.type('txt').send('Olá : ) -> digite a expressão ali na url');
   }
-  console.log(`||${expression + Number(expression)}||`);
+  // console.log(`||${expression + Number(expression)}||`);
 });
 
 

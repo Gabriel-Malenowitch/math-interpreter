@@ -34,15 +34,9 @@ class Calc {
         this.expression = this.solveItens(this.expression);
         ended = true;
       }
-      console.log(this.expression);
 
       if (cont >= 15) {
         ended = true;
-        console.log(`
-        =================
-        =================
-        =================
-        `);
       }
 
       cont++;
@@ -198,12 +192,8 @@ class Calc {
       // Retorna os itens resolvidos
       const newResults = oldResults.map((item)=>this.solveItens(item));
 
-      // results.forEach(e=>console.log(e))
-      // newResults.forEach(e=>console.log(e))
-
       oldResults.forEach((item, key)=>{
         const result = newResults[key];
-        console.log(expression, item, result);
         expression = expression.replace(`(${item})`, result);
       });
 
