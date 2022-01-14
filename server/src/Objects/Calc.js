@@ -7,14 +7,18 @@ class Calc {
 
   // regExDissolveIitens = /\(([0-9]|(\-|\+|\\|\*))*\)/g;
   regExDissolveIitens = /\([^\)\(]+\)/g;
-  regExFindItensToSort = /((\-|\+)?[0-9]+((\*|\/)-?[0-9]+)+)|((\+|\-)?[0-9]+)/g;
-  regExSeparateItem = /(\/|\*)|((\-|\+)?[0-9]+)/g;
+  // eslint-disable-next-line max-len
+  regExFindItensToSort = /(((\-|\+)?[0-9]+(\.[0-9]+)?((\*|\/)\-?[0-9]+(\.[0-9]+)?)+))|((\+|\-)?[0-9]+(\.[0-9]+)?)/g;
+  regExSeparateItem = /(\/|\*)|((\-|\+)?[0-9]+(\.[0-9]+)?)/g;
 
-  regExIsANumber = /(\-|\+)?[0-9]+/;
+  regExIsANumber = /(\-|\+)?[0-9]+(\.[0-9]+)?/;
   regExIncludeOperators = /(\/|\*)/;
 
   getResult() {
     return this.expression;
+  }
+  getToFixedResult() {
+    return Number(this.expression).toFixed(5);
   }
   set(newExpression) {
     this.expression = newExpression;
