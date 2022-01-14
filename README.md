@@ -7,7 +7,7 @@
 ### Como utilizar:
 ```
 > npm install
-> npm server
+> npm run dev
 > echo ser feliz
 ```
 ### Qualquer dúvida estou a disposição.
